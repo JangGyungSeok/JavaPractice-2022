@@ -1,6 +1,5 @@
 package com.practice.javapractice2022.repository;
 
-import com.practice.javapractice2022.entity.Member;
 import com.practice.javapractice2022.entity.Team;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class TeamRepository {
+public class TeamJpaRepository {
     @PersistenceContext
     private EntityManager em;
 
