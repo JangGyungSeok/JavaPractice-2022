@@ -6,9 +6,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
-    show-sql: true
+    hibernate:
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
-    hibernate:
-      ddl-auto: update
+    show-sql: true
+
+logging.level:
+  org.hibernate.sql: debug
+#  org.hibernate.type: trace
