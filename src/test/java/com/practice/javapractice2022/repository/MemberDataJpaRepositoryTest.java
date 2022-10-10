@@ -74,4 +74,21 @@ class MemberDataJpaRepositoryTest {
         long deletedCount = memberDataJpaRepository.count();
         assertThat(deletedCount).isEqualTo(0);
     }
+
+
+    // data jpa - query method 기능 검증!
+    @Test
+    public void findByUsernameAndAgeGreaterThenTest() {
+        Member m1 = new Member("member1", 10);
+        Member m2 = new Member("member1", 20);
+
+        memberDataJpaRepository.save(m1);
+        memberDataJpaRepository.save(m2);
+
+        List<Member> result = memberDataJpaRepository.findByUsernameAndAgeGreaterThan("member1", 15);
+
+        assertThat(result.get(0).getUsername()).isEqualTo("member1");
+        assertThat(result.get(0).getAge()).isEqualTo(20);
+        assertThat(result.size()).isEqualTo(1);
+    }
 }
