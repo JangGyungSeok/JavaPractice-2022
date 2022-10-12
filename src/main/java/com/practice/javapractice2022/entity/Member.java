@@ -9,6 +9,12 @@ import javax.persistence.*;
 @Setter // setter는 운영에선 직접 지정해준다.. annotation 사용하지 않음
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "username", "age"}) // 연관 테이블은 ToString하지 않는것이 좋다.
+// named query 사용하려면 있어야함
+// application loading 시점에 exception을 잡을 수 있다. parsing을 먼저 해봄
+@NamedQuery( 
+        name = "Member.findByUsername",
+        query = "select m from Member m where m.username = :username"
+)
 public class Member {
     @Id
     @GeneratedValue

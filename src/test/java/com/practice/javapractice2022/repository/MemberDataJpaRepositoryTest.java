@@ -91,4 +91,33 @@ class MemberDataJpaRepositoryTest {
         assertThat(result.get(0).getAge()).isEqualTo(20);
         assertThat(result.size()).isEqualTo(1);
     }
+
+    // Data JPA named query 테스트
+    @Test
+    public void testDataJpaNameQuery() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberDataJpaRepository.save(m1);
+        memberDataJpaRepository.save(m2);
+
+        List<Member> result = memberDataJpaRepository.findByUsername("AAA");
+
+        Member findMember = result.get(0);
+        assertThat(findMember).isEqualTo(m1);
+    }
+
+    @Test
+    public void testDataJpaNameQuery2() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberDataJpaRepository.save(m1);
+        memberDataJpaRepository.save(m2);
+
+        List<Member> result = memberDataJpaRepository.findMember("AAA", 10);
+
+        Member findMember = result.get(0);
+        assertThat(findMember).isEqualTo(m1);
+    }
 }
