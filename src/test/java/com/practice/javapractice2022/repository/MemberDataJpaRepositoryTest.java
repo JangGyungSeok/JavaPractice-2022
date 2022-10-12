@@ -1,11 +1,14 @@
 package com.practice.javapractice2022.repository;
 
+import com.practice.javapractice2022.dto.MemberDto;
 import com.practice.javapractice2022.entity.Member;
+import com.practice.javapractice2022.entity.Team;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -18,6 +21,8 @@ class MemberDataJpaRepositoryTest {
 
     @Autowired
     MemberDataJpaRepository memberDataJpaRepository;
+    @Autowired
+    TeamDataJpaRepository teamDataJpaRepository;
 
     @Test
     public void testMember() {
@@ -119,5 +124,64 @@ class MemberDataJpaRepositoryTest {
 
         Member findMember = result.get(0);
         assertThat(findMember).isEqualTo(m1);
+    }
+
+    @Test
+    public void queryAnnotationTest1() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberDataJpaRepository.save(m1);
+        memberDataJpaRepository.save(m2);
+
+        List<String> usernameList = memberDataJpaRepository.findUsernameList();
+//        assertThat(usernameList.get(0)).isEqualTo("AAA")
+        for (String s : usernameList) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    // DTO 로 반환받기
+    @Test
+    public void queryAnnotationTest2() {
+        Team team = new Team("teamA");
+        teamDataJpaRepository.save(team);
+
+        Member m1 = new Member("AAA", 10);
+        m1.setTeam(team);
+        memberDataJpaRepository.save(m1);
+
+        List<MemberDto> memberDto = memberDataJpaRepository.findMemberDto();
+        for(MemberDto dto : memberDto) {
+            System.out.println("memberDto = " + dto);
+        }
+    }
+
+    @Test
+    public void findByNames() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberDataJpaRepository.save(m1);
+        memberDataJpaRepository.save(m2);
+
+        List<Member> result = memberDataJpaRepository.findByNames(Arrays.asList("AAA", "BBB"));
+        for (Member member : result) {
+            System.out.println("member = " + member);
+        }
+    }
+
+    @Test
+    public void returnTypeTest() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberDataJpaRepository.save(m1);
+        memberDataJpaRepository.save(m2);
+
+        System.out.println(memberDataJpaRepository.findListByUsername("AAA")); // List의 경우 null이 아닌 collection을 반환
+        System.out.println(memberDataJpaRepository.findMemberByUsername("AAA")); // 단건 조회 시 null 반환
+        System.out.println(memberDataJpaRepository.findOptionalByUsername("AAA"));
+
     }
 }
